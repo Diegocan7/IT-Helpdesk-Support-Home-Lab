@@ -78,5 +78,5 @@ This confirms full end-to-end policy delivery: GPO authored on the DC → linked
 
 ## Next: Phase 2
  
-With identity and policy enforcement working, the next phase adds a ticketing system (osTicket or Zammad) to simulate real helpdesk request handling.
+With identity and policy enforcement working, the next phase adds a ticketing system to simulate real helpdesk request handling.
 
