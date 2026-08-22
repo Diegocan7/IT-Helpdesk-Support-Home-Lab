@@ -40,7 +40,7 @@ Created a simple, realistic OU layout directly under the domain root:
 ### 4. Client join
 Built CLIENT01 as a Windows 11 Pro VM, gave it a static IP with DNS pointed at DC01, and joined it to `corp.me-lab.local` via Settings → Access work or school → Join a local Active Directory domain.
 
-![CLIENT01 sign-in screen showing both the local account and the CORP\Administrator domain account](../screenshots/phase1-ad/domain-signin-screen.webp)
+![CLIENT01 sign-in screen showing both the local account and the CORP\Administrator domain account](../screenshots/phase1-ad/signin-screen.webp)
 
 ### 5. Baseline Group Policy
 Created `Baseline-Employee-Policy`, linked to the `Employees` OU, enforcing a computer-level interactive logon inactivity limit (5 minutes) — the kind of basic control that maps directly to access-control requirements in frameworks like SOC 2 (CC6.1) and ISO 27001 (A.9).
@@ -49,7 +49,7 @@ Created `Baseline-Employee-Policy`, linked to the `Employees` OU, enforcing a co
 
 Ran `gpresult /r` on CLIENT01 after moving its computer object into the `Employees` OU (computer-level GPOs only apply to computer objects located inside the linked OU) and confirmed the policy was actually delivered:
 
-![gpresult output confirming Baseline-Employee-Policy applied to CLIENT01](../screenshots/phase1-ad/gpresult-verification.png)
+![gpresult output confirming Baseline-Employee-Policy applied to CLIENT01](../screenshots/phase1-ad/gpresult-verification.jpg)
 
 ```
 COMPUTER SETTINGS
