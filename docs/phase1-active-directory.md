@@ -29,12 +29,18 @@ Created a simple, realistic OU layout directly under the domain root:
 - `Contractors` — non-employee accounts
 - `IT` — IT staff accounts and IT-specific security groups
 
+![Active Directory OU and container structure](../screenshots/phase1-ad/ou-structure.webp)
+
 ### 3. Users & groups
 - A personal IT admin user account (separate from the built-in `Administrator`, following the principle of not using a break-glass account for daily work)
 - A `Help Desk Security` security group, scoped to the IT OU, with the IT user added as a member — laying the groundwork for delegating specific permissions instead of granting full Domain Admin rights
 
+![Help Desk Security group membership](../screenshots/phase1-ad/help-desk-security-members.webp)
+
 ### 4. Client join
 Built CLIENT01 as a Windows 11 Pro VM, gave it a static IP with DNS pointed at DC01, and joined it to `corp.me-lab.local` via Settings → Access work or school → Join a local Active Directory domain.
+
+![CLIENT01 sign-in screen showing both the local account and the CORP\Administrator domain account](../screenshots/phase1-ad/domain-signin-screen.webp)
 
 ### 5. Baseline Group Policy
 Created `Baseline-Employee-Policy`, linked to the `Employees` OU, enforcing a computer-level interactive logon inactivity limit (5 minutes) — the kind of basic control that maps directly to access-control requirements in frameworks like SOC 2 (CC6.1) and ISO 27001 (A.9).
@@ -42,6 +48,8 @@ Created `Baseline-Employee-Policy`, linked to the `Employees` OU, enforcing a co
 ## Verification
 
 Ran `gpresult /r` on CLIENT01 after moving its computer object into the `Employees` OU (computer-level GPOs only apply to computer objects located inside the linked OU) and confirmed the policy was actually delivered:
+
+![gpresult output confirming Baseline-Employee-Policy applied to CLIENT01](../screenshots/phase1-ad/gpresult-verification.png)
 
 ```
 COMPUTER SETTINGS
@@ -68,6 +76,7 @@ This confirms full end-to-end policy delivery: GPO authored on the DC → linked
 - **Computer objects default to the `Computers` container**, not whichever OU you expect — a computer-level GPO linked to an OU will silently not apply (`gpresult` shows `N/A`) until the computer object is moved into that OU.
 - **The built-in `Domain Controllers` OU is reserved** for domain controller computer objects only — accidentally nesting other OUs or groups inside it (rather than at the domain root) is an easy early mistake, and moving objects back out may require disabling "Protect object from accidental deletion" first (View → Advanced Features must be on to access this).
 
-## Screenshots
+## Next: Phase 2
+ 
+With identity and policy enforcement working, the next phase adds a ticketing system (osTicket or Zammad) to simulate real helpdesk request handling.
 
-See `screenshots/phase1-ad/` for supporting screenshots, including the AD structure, domain join confirmation, and the `gpresult` verification output above.
